@@ -8,32 +8,44 @@ on: [push]
 
 # что надо сделать, если произшло событие триггер(ы) описанный в on
 jobs:
+  # Первый "жоб" - покрытие тестами, поэтому назовем его tests
   tests:
     # «Раннер» — создание изолированного окружения с последней версией Ubuntu 
     runs-on: ubuntu-latest
 
     steps:
-    # Запуск actions checkout — готового скрипта 
-    # для клонирования репозитория
+    # Запуск готового скрипта actions checkout для клонирования репозитория
     - uses: actions/checkout@v2
+    
+    # Шаг 1 : Установка питона (Set up Python)
     - name: Set up Python
-      # Запуск actions setup-python — готового скрипта 
+      # Запуск готового скрипта  actions setup-python
       # для развёртывания окружения Python
       uses: actions/setup-python@v2
       with:
         # Выбор версии Python
         python-version: 3.7
-
+        
+    # Шаг 2 : Установка зависимостей (Install dependencies)
     - name: Install dependencies
       run: | 
-        # выполни команду для обновление pip
+        # обнрви pip
         python -m pip install --upgrade pip 
-        # установка flake8 и его плагинов
+        # установи flake8 и его плагины
         pip install flake8 pep8-naming flake8-broken-line flake8-return flake8-isort
-        # установка зависимостей
-        pip install -r requirements.txt 
-
+        # установи зависимости
+        pip install -r requirements.txt
+        
+    # Шаг 3 : Покрытие тестами 
     - name: Test with flake8 and django tests
       run: |
         # запуск проверки проекта по flake8
         python -m flake8
+        # перейти в папку, содержащую manage.py
+        # #<корневая_папка_infra_actions>/<папка_проекта>/manage.py
+        cd infra_project/
+        # запусти написанные разработчиком тесты
+        # они лежат внутри проекта в файле tests.py
+        python manage.py test
+        
+

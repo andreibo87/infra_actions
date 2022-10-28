@@ -29,7 +29,7 @@ jobs:
     # Шаг 2 : Установка зависимостей (Install dependencies)
     - name: Install dependencies
       run: | 
-        # обнрви pip
+        # обнови pip
         python -m pip install --upgrade pip 
         # установи flake8 и его плагины
         pip install flake8 pep8-naming flake8-broken-line flake8-return flake8-isort
@@ -78,4 +78,3 @@ jobs:
         with:
           push: true
           tags: andreibo87/infra_actions:ver.1.0 
-          

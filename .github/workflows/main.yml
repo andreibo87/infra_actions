@@ -97,14 +97,8 @@ jobs:
         passphrase: ${{ secrets.PASSPHRASE }} # Если необходимо
         script: |
           # Выполняет pull образа с DockerHub
-          sudo docker pull <имя-пользователя>/<имя-репозитория>
+          sudo docker pull andreibo87/infra_actions:ver.1.0
           #остановка всех контейнеров
           sudo docker stop $(sudo docker ps -a -q)
-          sudo docker run --rm -d -p 5000:5000 <имя-пользователя>/<имя-репозитория>
+          sudo docker run --rm -d -p 5000:5000 andreibo87/infra_actions:ver.1.0
           
-                  script: |
-          # Выполняет pull образа с DockerHub
-          sudo docker pull usolev/infra_actions:v1.0 
-          #остановка всех контейнеров
-          sudo docker stop $(sudo docker ps -a -q)
-          sudo docker run --rm -d -p 5000:5000 usolev/infra_actions:v1.0 

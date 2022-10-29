@@ -78,3 +78,33 @@ jobs:
         with:
           push: true
           tags: andreibo87/infra_actions:ver.1.0 
+          
+  deploy:
+  # Job №3 - деплой на сервер 
+    runs-on: ubuntu-latest
+    # Не выполнять сразу, ждать, пока выполнится build_and_push_to_docker_hub
+    needs: build_and_push_to_docker_hub
+    
+    steps:
+    # Шаг 1 : Выполнить необходимые дл деплоя команды
+    - name: executing remote ssh commands to deploy
+      uses: appleboy/ssh-action@master # скрипт
+      # подтягиваем переменные из секретки
+      with:
+        host: ${{ secrets.HOST }}
+        username: ${{ secrets.USER }}
+        key: ${{ secrets.SSH_KEY }}
+        passphrase: ${{ secrets.PASSPHRASE }} # Если необходимо
+        script: |
+          # Выполняет pull образа с DockerHub
+          sudo docker pull <имя-пользователя>/<имя-репозитория>
+          #остановка всех контейнеров
+          sudo docker stop $(sudo docker ps -a -q)
+          sudo docker run --rm -d -p 5000:5000 <имя-пользователя>/<имя-репозитория>
+          
+                  script: |
+          # Выполняет pull образа с DockerHub
+          sudo docker pull usolev/infra_actions:v1.0 
+          #остановка всех контейнеров
+          sudo docker stop $(sudo docker ps -a -q)
+          sudo docker run --rm -d -p 5000:5000 usolev/infra_actions:v1.0 

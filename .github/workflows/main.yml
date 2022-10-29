@@ -102,3 +102,19 @@ jobs:
           sudo docker stop $(sudo docker ps -a -q)
           sudo docker run --rm -d -p 5000:5000 andreibo87/infra_actions:ver.1.0
           
+  send_message:
+  # Job №4 - отправка уведомления в телеграм
+    runs-on: ubuntu-latest
+    # Не выполнять сразу, ждать, пока выполнится deploy
+    needs: deploy
+    steps:
+    # Шаг 1 : Отправить сообщение в ТГ используя скрипт
+    - name: send message
+      uses: appleboy/telegram-action@master # скрипт
+      # подтягиваем переменные из секретки
+      with:
+        to: ${{ secrets.TELEGRAM_TO }} # id кому отправить сообщение
+        token: ${{ secrets.TELEGRAM_TOKEN }} # токен бота 
+        message: ${{ github.workflow }} успешно выполнен! 
+        
+          
